@@ -16,11 +16,14 @@ public class Events {
     @SubscribeEvent
     public static void getBreakSpeed(PlayerEvent.BreakSpeed event) {
         ResourceLocation currentBlock = event.getState().getBlock().getRegistryName();
+        float hardness = event.getState().getBlockHardness(event.getPlayer().getEntityWorld(), event.getPos());
         IDataManager player = ((IDataManager) event.getPlayer());
         if (EnchantmentHelper.getEnchantmentLevel(Enchantments.MOMENTUM.get(), event.getPlayer().getHeldItemMainhand()) > 0
         && player.getValue(Enchantments.LAST_BLOCK).toString().equals(currentBlock.toString()))
         {
-            event.setNewSpeed((float) (event.getOriginalSpeed() * Math.pow(2, player.getValue(Enchantments.BLOCKS_MINED))));
+            float speedFactor = (float) Math.pow(Math.pow(2, -1.0/16 * hardness + 3.0/16) + 1, player.getValue(Enchantments.BLOCKS_MINED) + 1);
+            event.setNewSpeed(event.getOriginalSpeed() * Math.min(22 * hardness / event.getPlayer().getHeldItemMainhand()
+                    .getDestroySpeed(event.getState()), (float) Math.pow(2, player.getValue(Enchantments.BLOCKS_MINED))));
         }
     }
 
