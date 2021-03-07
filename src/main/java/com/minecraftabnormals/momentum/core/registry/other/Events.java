@@ -21,9 +21,9 @@ public class Events {
         if (EnchantmentHelper.getEnchantmentLevel(Enchantments.MOMENTUM.get(), event.getPlayer().getHeldItemMainhand()) > 0
         && player.getValue(Enchantments.LAST_BLOCK).toString().equals(currentBlock.toString()))
         {
-            float speedFactor = (float) Math.pow(Math.pow(2, -1.0/16 * hardness + 3.0/16) + 1, player.getValue(Enchantments.BLOCKS_MINED) + 1);
-            event.setNewSpeed(event.getOriginalSpeed() * Math.min(22 * hardness / event.getPlayer().getHeldItemMainhand()
-                    .getDestroySpeed(event.getState()), (float) Math.pow(2, player.getValue(Enchantments.BLOCKS_MINED))));
+            float speedFactor = (float) Math.pow(2, player.getValue(Enchantments.BLOCKS_MINED));
+            event.setNewSpeed(event.getOriginalSpeed() * (player.getValue(Enchantments.BLOCKS_MINED) < 10 ? speedFactor :
+                    Math.min(22 * hardness / event.getPlayer().getHeldItemMainhand().getDestroySpeed(event.getState()), speedFactor)));
         }
     }
 
