@@ -22,7 +22,7 @@ public class Events {
         && player.getValue(Enchantments.LAST_BLOCK).toString().equals(currentBlock.toString()))
         {
             float speedFactor = (float) Math.pow(Math.pow(2, -1.0/16 * hardness + 3.0/16) + 1, player.getValue(Enchantments.BLOCKS_MINED) + 1);
-            event.setNewSpeed(event.getOriginalSpeed() * (player.getValue(Enchantments.BLOCKS_MINED) + 1 < 4 * hardness ? speedFactor :
+            event.setNewSpeed(event.getOriginalSpeed() * (player.getValue(Enchantments.BLOCKS_MINED) + 1 < 10 * Math.sqrt(hardness) ? speedFactor :
                     Math.min(22 * hardness / event.getPlayer().getHeldItemMainhand().getDestroySpeed(event.getState()), speedFactor)));
         }
     }
