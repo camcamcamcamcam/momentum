@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[32,)"
-issueTrackerURL="https://github.com/camcamcamcamcam/camtest/issues"
-license="https://github.com/camcamcamcamcam/camtest/blob/master/LICENSE.txt"
+issueTrackerURL="https://github.com/camcamcamcamcam/momentum/issues"
+license="https://github.com/camcamcamcamcam/momentum/blob/master/LICENSE.txt"
 
 [[mods]]
     modId="momentum"

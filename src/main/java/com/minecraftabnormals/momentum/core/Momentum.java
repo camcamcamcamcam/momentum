@@ -28,6 +28,7 @@ public class Momentum
     private void setupCommon(final FMLCommonSetupEvent event) {
         DeferredWorkQueue.runLater(() -> {
             Enchantments.registerTrackedData();
+            Enchantments.registerLootInjectors();
         });
     }
 }
