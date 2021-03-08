@@ -28,8 +28,8 @@ public class Enchantments {
 
     public static void registerLootInjectors() {
         LootInjectionRegistry.LootInjector injector = new LootInjectionRegistry.LootInjector(Momentum.MODID);
-        injector.addLootInjection(injector.buildLootPool("abandoned_mineshaft", 2, 0), LootTables.CHESTS_ABANDONED_MINESHAFT);
-        injector.addLootInjection(injector.buildLootPool("simple_dungeon", 2, 0), LootTables.CHESTS_SIMPLE_DUNGEON);
+        injector.addLootInjection(injector.buildLootPool("abandoned_mineshaft", 1, 0), LootTables.CHESTS_ABANDONED_MINESHAFT);
+        injector.addLootInjection(injector.buildLootPool("simple_dungeon", 1, 0), LootTables.CHESTS_SIMPLE_DUNGEON);
     }
 
 
