@@ -5,13 +5,12 @@ license="https://github.com/camcamcamcamcam/momentum/blob/master/LICENSE.txt"
 
 [[mods]]
     modId="momentum"
-    version="1.2.1"
+    version="1.0.0"
     logoFile="logo.png"
     authors="Cameron, Jackson, Smelly"
     displayName="Momentum"
     description='''
-    The Momentum Enchantment
-    '''
+    An enchantment that speeds up with consecutive mining of the same block.'''
 
 [[dependencies.momentum]]
     modId="forge"
