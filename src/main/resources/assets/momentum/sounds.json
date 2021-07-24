@@ -1,0 +1,11 @@
+{
+	"item.momentum.halt": {
+		"category": "player",
+		"subtitle": "subtitles.momentum.halt",
+		"sounds": [
+		{
+			"name": "momentum:item/momentum_halt"
+		}
+		]
+	}
+}
