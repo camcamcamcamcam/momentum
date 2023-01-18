@@ -11,7 +11,7 @@ public class MomentumEnchantment extends Enchantment {
     }
 
     public boolean canApplyTogether(Enchantment ench) {
-        return ench instanceof EfficiencyEnchantment ? false : super.canApplyTogether(ench);
+        return ench instanceof EfficiencyEnchantment ? false : super.checkCompatibility(ench);
     }
 
     public boolean isTreasureEnchantment() {

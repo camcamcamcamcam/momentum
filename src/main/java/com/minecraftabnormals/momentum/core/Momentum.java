@@ -45,7 +45,7 @@ public class Momentum {
         TrackedDataManager.INSTANCE.registerData(new ResourceLocation(Momentum.MODID, "sound_played"), SOUND_PLAYED);
 
         LootInjectionRegistry.LootInjector injector = new LootInjectionRegistry.LootInjector(Momentum.MODID);
-        injector.addLootInjection(injector.buildLootPool("abandoned_mineshaft", 1, 0), LootTables.CHESTS_ABANDONED_MINESHAFT);
-        injector.addLootInjection(injector.buildLootPool("simple_dungeon", 1, 0), LootTables.CHESTS_SIMPLE_DUNGEON);
+        injector.addLootInjection(injector.buildLootPool("abandoned_mineshaft", 1, 0), LootTables.ABANDONED_MINESHAFT);
+        injector.addLootInjection(injector.buildLootPool("simple_dungeon", 1, 0), LootTables.SIMPLE_DUNGEON);
     }
 }
