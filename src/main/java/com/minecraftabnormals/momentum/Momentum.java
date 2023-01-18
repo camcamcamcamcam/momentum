@@ -10,8 +10,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -43,5 +45,8 @@ public class Momentum {
         LootInjectionRegistry.LootInjector injector = new LootInjectionRegistry.LootInjector(Momentum.MODID);
         injector.addLootInjection(injector.buildLootPool("abandoned_mineshaft", 1, 0), LootTables.ABANDONED_MINESHAFT);
         injector.addLootInjection(injector.buildLootPool("simple_dungeon", 1, 0), LootTables.SIMPLE_DUNGEON);
+        // todo change these to be percentage chances when you find out how
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MomentumConfig.COMMON_SPEC);
     }
 }

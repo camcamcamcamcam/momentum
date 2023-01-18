@@ -51,7 +51,7 @@ public class MomentumEnchantment extends Enchantment {
                 && playerManager.getValue(LAST_BLOCK).toString().equals(currentBlock.toString()))
         {
             float speedFactor = (float) Math.pow(Math.pow(2, -1.0 / 16 * hardness + 3.0 / 16) + 1, playerManager.getValue(BLOCKS_MINED) + 1);
-            if (playerManager.getValue(BLOCKS_MINED) + 1 >= 8 * Math.sqrt(hardness)) {
+            if (playerManager.getValue(BLOCKS_MINED) + 1 >= 8 * Math.sqrt(hardness) && !MomentumConfig.COMMON.noMoving.get()) {
                 speedFactor = Math.min(22 * hardness / player.getMainHandItem().getDestroySpeed(event.getState()), speedFactor);
                 if (!playerManager.getValue(SOUND_PLAYED)) {
                     event.getPlayer().level.playSound(player, event.getPos(), Momentum.MOMENTUM_HALT.get(), SoundCategory.PLAYERS, 0.2f, 1.0f);
@@ -81,11 +81,13 @@ public class MomentumEnchantment extends Enchantment {
         }
     }
 
-    /*
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 
         if (event.phase == TickEvent.Phase.START)
+            return;
+
+        if (!MomentumConfig.COMMON.noMoving.get())
             return;
 
         PlayerEntity player = event.player;
@@ -118,6 +120,6 @@ public class MomentumEnchantment extends Enchantment {
         playerManager.setValue(SOUND_PLAYED, false);
         player.level.playSound(player, player.blockPosition(), Momentum.MOMENTUM_HALT.get(), SoundCategory.PLAYERS, 0.2f, 1.0f);
 
-    }*/
+    }
 
 }
