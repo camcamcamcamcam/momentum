@@ -25,7 +25,7 @@ h = hardness, n = number of blocks mined, vi = initial speed, vf = final speed
 Post release
 I showcased this mod as an example of how iteration works, in my video titled "Why Minecraft Updates Take Time", and also asked for people to test it and give feedback. One piece that stood out to me was the idea that the instamine cap didn't feel intended - some people even thought it was a bug! I added in a sound to communicate that the instamine period was over, but I am also considering a more intuitive solution as a replacement to the instamine cap.
 
-One idea I came across when gathering feedback is that the momentum resets when the player moves. This would be more intuitive, because it would naturally reset when the player has ran out of blocks they can reach. To make it a little more forgiving, I decided to allow sneaking, and to encourage the use of beacons, allow walking with Haste I and sprinting with Haste II.
+One idea I came across when gathering feedback is the momentum resetting when the player moves. This would be more intuitive, because it would naturally reset when the player has ran out of blocks they can reach. To make it a little more forgiving, I decided to allow sneaking, and to encourage the use of beacons, allow walking with Haste I and sprinting with Haste II.
 
 I initially made Momentum have a 100% chance to spawn in dungeon and mineshaft chests, with 75% in the form of an Iron Pickaxe and 25% in the form of a book. This made it easier for people to obtain it in survival mode as soon as possible for ease of playtesting. However, it was very easy to amass large amounts of momentum enchanted items, so I tweaked the rates to be pickaxes having a 50% chance to spawn in mineshafts, and books with 75% chance to spawn in dungeons.
 
