@@ -45,7 +45,6 @@ public class Momentum {
         LootInjectionRegistry.LootInjector injector = new LootInjectionRegistry.LootInjector(Momentum.MODID);
         injector.addLootInjection(injector.buildLootPool("abandoned_mineshaft", 1, 0), LootTables.ABANDONED_MINESHAFT);
         injector.addLootInjection(injector.buildLootPool("simple_dungeon", 1, 0), LootTables.SIMPLE_DUNGEON);
-        // todo change these to be percentage chances when you find out how
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MomentumConfig.COMMON_SPEC);
     }
