@@ -2,7 +2,9 @@ package com.teamabnormals.momentum;
 
 import com.teamabnormals.blueprint.common.loot.modification.LootModifierProvider;
 import com.teamabnormals.blueprint.common.loot.modification.modifiers.LootPoolEntriesModifier;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -16,15 +18,16 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
 
 public class MomentumLootModifierProvider extends LootModifierProvider {
 
-    public MomentumLootModifierProvider(DataGenerator dataGenerator) {
-        super(dataGenerator, Momentum.MODID);
+    public MomentumLootModifierProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(Momentum.MODID, output, lookupProvider);
     }
 
     @Override
-    protected void registerEntries() {
+    protected void registerEntries(HolderLookup.Provider provider) {
         addNoneReplacingModifier("add_momentum_to_simple_dungeon", createMomentumEnchantedWithCondition(Items.BOOK, 1, 0, 1, LootItemRandomChanceCondition.randomChance(0.75F)), BuiltInLootTables.SIMPLE_DUNGEON);
         addNoneReplacingModifier("add_momentum_to_abandoned_mineshaft", createMomentumEnchantedWithCondition(Items.IRON_PICKAXE, 3,0, 1, LootItemRandomChanceCondition.randomChance(0.5F)), BuiltInLootTables.ABANDONED_MINESHAFT);
     }

@@ -48,7 +48,7 @@ public class MomentumEnchantment extends Enchantment {
         IDataManager playerManager = ((IDataManager) player);
 
         if (event.getPosition().isPresent()) {
-            float hardness = event.getState().getDestroySpeed(player.level, event.getPosition().get());
+            float hardness = event.getState().getDestroySpeed(player.level(), event.getPosition().get());
             if (EnchantmentHelper.getTagEnchantmentLevel(Momentum.MOMENTUM.get(), player.getMainHandItem()) > 0
                     && playerManager.getValue(LAST_BLOCK).toString().equals(currentBlock.toString()))
             {
@@ -56,7 +56,7 @@ public class MomentumEnchantment extends Enchantment {
                 if (playerManager.getValue(BLOCKS_MINED) + 1 >= 8 * Math.sqrt(hardness) && !MomentumConfig.COMMON.noMoving.get()) {
                     speedFactor = Math.min(22 * hardness / player.getMainHandItem().getDestroySpeed(event.getState()), speedFactor);
                     if (!playerManager.getValue(SOUND_PLAYED)) {
-                        event.getEntity().level.playSound(player, event.getPosition().get(), Momentum.MOMENTUM_HALT.get(), SoundSource.PLAYERS, 0.2f, 1.0f);
+                        event.getEntity().level().playSound(player, event.getPosition().get(), Momentum.MOMENTUM_HALT.get(), SoundSource.PLAYERS, 0.2f, 1.0f);
                         playerManager.setValue(SOUND_PLAYED, true);
                     }
                 }
@@ -70,7 +70,7 @@ public class MomentumEnchantment extends Enchantment {
         ResourceLocation currentBlock = ForgeRegistries.BLOCKS.getKey(event.getState().getBlock());
         Player player = event.getPlayer();
         IDataManager playerManager = ((IDataManager) player);
-        boolean isBlockInstaminable = event.getState().getDestroySpeed(player.level, event.getPos()) == 0;
+        boolean isBlockInstaminable = event.getState().getDestroySpeed(player.level(), event.getPos()) == 0;
 
         if (EnchantmentHelper.getTagEnchantmentLevel(Momentum.MOMENTUM.get(), player.getMainHandItem()) > 0
                 && playerManager.getValue(LAST_BLOCK).toString().equals(currentBlock.toString())) {
@@ -121,7 +121,7 @@ public class MomentumEnchantment extends Enchantment {
 
         playerManager.setValue(BLOCKS_MINED, 0);
         playerManager.setValue(SOUND_PLAYED, false);
-        player.level.playSound(player, player.blockPosition(), Momentum.MOMENTUM_HALT.get(), SoundSource.PLAYERS, 0.2f, 1.0f);
+        player.level().playSound(player, player.blockPosition(), Momentum.MOMENTUM_HALT.get(), SoundSource.PLAYERS, 0.2f, 1.0f);
 
     }
 

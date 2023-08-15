@@ -3,7 +3,9 @@ package com.teamabnormals.momentum;
 import com.teamabnormals.blueprint.common.world.storage.tracking.TrackedDataManager;
 import com.teamabnormals.blueprint.core.util.registry.RegistryHelper;
 import com.teamabnormals.blueprint.core.util.registry.SoundSubRegistryHelper;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -18,6 +20,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.concurrent.CompletableFuture;
 
 @Mod(Momentum.MODID)
 @Mod.EventBusSubscriber(modid = Momentum.MODID)
@@ -50,6 +54,8 @@ public class Momentum {
     @SubscribeEvent
     public void gatherData(GatherDataEvent event) {
         DataGenerator generator =  event.getGenerator();
-        generator.addProvider(event.includeServer(), new MomentumLootModifierProvider(generator));
+        PackOutput packOutput = generator.getPackOutput();
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+        generator.addProvider(event.includeServer(), new MomentumLootModifierProvider(packOutput, lookupProvider));
     }
 }

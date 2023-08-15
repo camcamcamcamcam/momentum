@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[43,)"
+loaderVersion="[47,)"
 issueTrackerURL="https://github.com/camcamcamcamcam/momentum/issues"
 license="https://github.com/camcamcamcamcam/momentum/blob/master/LICENSE.txt"
 
@@ -15,20 +15,20 @@ license="https://github.com/camcamcamcamcam/momentum/blob/master/LICENSE.txt"
 [[dependencies.momentum]]
     modId="forge"
     mandatory=true
-    versionRange="[43.2,)"
+    versionRange="[47.1,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.momentum]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.2,1.20)"
+    versionRange="[1.20,1.21)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.momentum]]
     modId="blueprint"
     mandatory=true
-    versionRange="[6.1.2,)"
+    versionRange="[7.0.0,)"
     ordering="AFTER"
     side="BOTH"
