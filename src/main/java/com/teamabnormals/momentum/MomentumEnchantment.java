@@ -3,6 +3,7 @@ package com.teamabnormals.momentum;
 import com.teamabnormals.blueprint.common.world.storage.tracking.DataProcessors;
 import com.teamabnormals.blueprint.common.world.storage.tracking.IDataManager;
 import com.teamabnormals.blueprint.common.world.storage.tracking.TrackedData;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -15,13 +16,13 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid = Momentum.MODID)
 public class MomentumEnchantment extends Enchantment {
-
     public static final TrackedData<Integer> BLOCKS_MINED = TrackedData.Builder.create(DataProcessors.INT, () -> 0).enableSaving().build();
     public static final TrackedData<ResourceLocation> LAST_BLOCK = TrackedData.Builder.create(DataProcessors.RESOURCE_LOCATION, () -> new ResourceLocation("air")).enableSaving().build();
     public static final TrackedData<Boolean> SOUND_PLAYED = TrackedData.Builder.create(DataProcessors.BOOLEAN, () -> false).enableSaving().build();
@@ -42,34 +43,36 @@ public class MomentumEnchantment extends Enchantment {
 
     @SubscribeEvent
     public static void getBreakSpeed(PlayerEvent.BreakSpeed event) {
-        ResourceLocation currentBlock = event.getState().getBlock().getRegistryName();
-        Player player = event.getPlayer();
+        ResourceLocation currentBlock = ForgeRegistries.BLOCKS.getKey(event.getState().getBlock());
+        Player player = event.getEntity();
         IDataManager playerManager = ((IDataManager) player);
-        float hardness = event.getState().getDestroySpeed(player.level, event.getPos());
 
-        if (EnchantmentHelper.getItemEnchantmentLevel(Momentum.MOMENTUM.get(), player.getMainHandItem()) > 0
-                && playerManager.getValue(LAST_BLOCK).toString().equals(currentBlock.toString()))
-        {
-            float speedFactor = (float) Math.pow(Math.pow(2, -1.0 / 16 * hardness + 3.0 / 16) + 1, playerManager.getValue(BLOCKS_MINED) + 1);
-            if (playerManager.getValue(BLOCKS_MINED) + 1 >= 8 * Math.sqrt(hardness) && !MomentumConfig.COMMON.noMoving.get()) {
-                speedFactor = Math.min(22 * hardness / player.getMainHandItem().getDestroySpeed(event.getState()), speedFactor);
-                if (!playerManager.getValue(SOUND_PLAYED)) {
-                    event.getPlayer().level.playSound(player, event.getPos(), Momentum.MOMENTUM_HALT.get(), SoundSource.PLAYERS, 0.2f, 1.0f);
-                    playerManager.setValue(SOUND_PLAYED, true);
+        if (event.getPosition().isPresent()) {
+            float hardness = event.getState().getDestroySpeed(player.level, event.getPosition().get());
+            if (EnchantmentHelper.getTagEnchantmentLevel(Momentum.MOMENTUM.get(), player.getMainHandItem()) > 0
+                    && playerManager.getValue(LAST_BLOCK).toString().equals(currentBlock.toString()))
+            {
+                float speedFactor = (float) Math.pow(Math.pow(2, -1.0 / 16 * hardness + 3.0 / 16) + 1, playerManager.getValue(BLOCKS_MINED) + 1);
+                if (playerManager.getValue(BLOCKS_MINED) + 1 >= 8 * Math.sqrt(hardness) && !MomentumConfig.COMMON.noMoving.get()) {
+                    speedFactor = Math.min(22 * hardness / player.getMainHandItem().getDestroySpeed(event.getState()), speedFactor);
+                    if (!playerManager.getValue(SOUND_PLAYED)) {
+                        event.getEntity().level.playSound(player, event.getPosition().get(), Momentum.MOMENTUM_HALT.get(), SoundSource.PLAYERS, 0.2f, 1.0f);
+                        playerManager.setValue(SOUND_PLAYED, true);
+                    }
                 }
+                event.setNewSpeed(event.getOriginalSpeed() * speedFactor);
             }
-            event.setNewSpeed(event.getOriginalSpeed() * speedFactor);
         }
     }
 
     @SubscribeEvent
     public static void onBlockDestroy(BlockEvent.BreakEvent event) {
-        ResourceLocation currentBlock = event.getState().getBlock().getRegistryName();
+        ResourceLocation currentBlock = ForgeRegistries.BLOCKS.getKey(event.getState().getBlock());
         Player player = event.getPlayer();
         IDataManager playerManager = ((IDataManager) player);
         boolean isBlockInstaminable = event.getState().getDestroySpeed(player.level, event.getPos()) == 0;
 
-        if (EnchantmentHelper.getItemEnchantmentLevel(Momentum.MOMENTUM.get(), player.getMainHandItem()) > 0
+        if (EnchantmentHelper.getTagEnchantmentLevel(Momentum.MOMENTUM.get(), player.getMainHandItem()) > 0
                 && playerManager.getValue(LAST_BLOCK).toString().equals(currentBlock.toString())) {
             playerManager.setValue(BLOCKS_MINED, playerManager.getValue(BLOCKS_MINED) + 1);
         } else if (!isBlockInstaminable) {

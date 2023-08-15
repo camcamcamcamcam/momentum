@@ -96,7 +96,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${project.minecraft}-${project.forge}"
-    implementation fg.deobf("curse.maven:blueprint-382216:3991478")
+    implementation fg.deobf("curse.maven:blueprint-382216:4442628")
 
 }
 
