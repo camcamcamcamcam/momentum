@@ -1,0 +1,43 @@
+{
+  "selector": "minecraft:chests/abandoned_mineshaft",
+  "priority": "normal",
+  "modifiers": [
+    {
+      "type": "entries",
+      "config": {
+        "replace": false,
+        "index": 1,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "conditions": [
+              {
+                "condition": "minecraft:random_chance",
+                "chance": 0.5
+              }
+            ],
+            "weight": 3,
+            "functions": [
+              {
+                "function": "minecraft:enchant_randomly",
+                "enchantments": [
+                  "momentum:momentum"
+                ]
+              },
+              {
+                "function": "minecraft:set_count",
+                "count": {
+                  "type": "minecraft:uniform",
+                  "min": 0.0,
+                  "max": 1.0
+                },
+                "add": false
+              }
+            ],
+            "name": "minecraft:iron_pickaxe"
+          }
+        ]
+      }
+    }
+  ]
+}

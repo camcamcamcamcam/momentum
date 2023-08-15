@@ -1,18 +1,18 @@
-package com.minecraftabnormals.momentum;
+package com.teamabnormals.momentum;
 
-import com.minecraftabnormals.abnormals_core.common.world.storage.tracking.DataProcessors;
-import com.minecraftabnormals.abnormals_core.common.world.storage.tracking.IDataManager;
-import com.minecraftabnormals.abnormals_core.common.world.storage.tracking.TrackedData;
-import net.minecraft.enchantment.EfficiencyEnchantment;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import com.teamabnormals.blueprint.common.world.storage.tracking.DataProcessors;
+import com.teamabnormals.blueprint.common.world.storage.tracking.IDataManager;
+import com.teamabnormals.blueprint.common.world.storage.tracking.TrackedData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.DiggingEnchantment;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -27,12 +27,12 @@ public class MomentumEnchantment extends Enchantment {
     public static final TrackedData<Boolean> SOUND_PLAYED = TrackedData.Builder.create(DataProcessors.BOOLEAN, () -> false).enableSaving().build();
 
     public MomentumEnchantment() {
-        super(Rarity.RARE, EnchantmentType.DIGGER, new EquipmentSlotType[]{EquipmentSlotType.MAINHAND});
+        super(Rarity.RARE, EnchantmentCategory.DIGGER, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
     }
 
     @Override
     public boolean checkCompatibility(Enchantment ench) {
-        return !(ench instanceof EfficiencyEnchantment) && super.checkCompatibility(ench);
+        return !(ench instanceof DiggingEnchantment) && super.checkCompatibility(ench);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class MomentumEnchantment extends Enchantment {
     @SubscribeEvent
     public static void getBreakSpeed(PlayerEvent.BreakSpeed event) {
         ResourceLocation currentBlock = event.getState().getBlock().getRegistryName();
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         IDataManager playerManager = ((IDataManager) player);
         float hardness = event.getState().getDestroySpeed(player.level, event.getPos());
 
@@ -54,7 +54,7 @@ public class MomentumEnchantment extends Enchantment {
             if (playerManager.getValue(BLOCKS_MINED) + 1 >= 8 * Math.sqrt(hardness) && !MomentumConfig.COMMON.noMoving.get()) {
                 speedFactor = Math.min(22 * hardness / player.getMainHandItem().getDestroySpeed(event.getState()), speedFactor);
                 if (!playerManager.getValue(SOUND_PLAYED)) {
-                    event.getPlayer().level.playSound(player, event.getPos(), Momentum.MOMENTUM_HALT.get(), SoundCategory.PLAYERS, 0.2f, 1.0f);
+                    event.getPlayer().level.playSound(player, event.getPos(), Momentum.MOMENTUM_HALT.get(), SoundSource.PLAYERS, 0.2f, 1.0f);
                     playerManager.setValue(SOUND_PLAYED, true);
                 }
             }
@@ -65,7 +65,7 @@ public class MomentumEnchantment extends Enchantment {
     @SubscribeEvent
     public static void onBlockDestroy(BlockEvent.BreakEvent event) {
         ResourceLocation currentBlock = event.getState().getBlock().getRegistryName();
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         IDataManager playerManager = ((IDataManager) player);
         boolean isBlockInstaminable = event.getState().getDestroySpeed(player.level, event.getPos()) == 0;
 
@@ -90,10 +90,10 @@ public class MomentumEnchantment extends Enchantment {
         if (!MomentumConfig.COMMON.noMoving.get())
             return;
 
-        PlayerEntity player = event.player;
+        Player player = event.player;
         IDataManager playerManager = ((IDataManager) player);
 
-        EffectInstance haste = player.getEffect(Effects.DIG_SPEED);
+        MobEffectInstance haste = player.getEffect(MobEffects.DIG_SPEED);
         int hasteLevel = -1;
         if (haste != null)
             hasteLevel = haste.getAmplifier();
@@ -118,7 +118,7 @@ public class MomentumEnchantment extends Enchantment {
 
         playerManager.setValue(BLOCKS_MINED, 0);
         playerManager.setValue(SOUND_PLAYED, false);
-        player.level.playSound(player, player.blockPosition(), Momentum.MOMENTUM_HALT.get(), SoundCategory.PLAYERS, 0.2f, 1.0f);
+        player.level.playSound(player, player.blockPosition(), Momentum.MOMENTUM_HALT.get(), SoundSource.PLAYERS, 0.2f, 1.0f);
 
     }
 
