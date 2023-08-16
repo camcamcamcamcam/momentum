@@ -1,4 +1,4 @@
-package com.minecraftabnormals.momentum;
+package com.teamabnormals.momentum;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;

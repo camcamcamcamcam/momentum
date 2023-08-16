@@ -1,22 +1,27 @@
-package com.minecraftabnormals.momentum;
+package com.teamabnormals.momentum;
 
-import com.minecraftabnormals.abnormals_core.common.world.storage.tracking.TrackedDataManager;
-import com.minecraftabnormals.abnormals_core.core.registry.LootInjectionRegistry;
-import com.minecraftabnormals.abnormals_core.core.util.registry.RegistryHelper;
-import com.minecraftabnormals.abnormals_core.core.util.registry.SoundSubRegistryHelper;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.loot.LootTables;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import com.teamabnormals.blueprint.common.world.storage.tracking.TrackedDataManager;
+import com.teamabnormals.blueprint.core.util.registry.RegistryHelper;
+import com.teamabnormals.blueprint.core.util.registry.SoundSubRegistryHelper;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+
+import java.util.concurrent.CompletableFuture;
 
 @Mod(Momentum.MODID)
 @Mod.EventBusSubscriber(modid = Momentum.MODID)
@@ -42,10 +47,15 @@ public class Momentum {
         TrackedDataManager.INSTANCE.registerData(new ResourceLocation(Momentum.MODID, "last_block"), MomentumEnchantment.LAST_BLOCK);
         TrackedDataManager.INSTANCE.registerData(new ResourceLocation(Momentum.MODID, "sound_played"), MomentumEnchantment.SOUND_PLAYED);
 
-        LootInjectionRegistry.LootInjector injector = new LootInjectionRegistry.LootInjector(Momentum.MODID);
-        injector.addLootInjection(injector.buildLootPool("abandoned_mineshaft", 1, 0), LootTables.ABANDONED_MINESHAFT);
-        injector.addLootInjection(injector.buildLootPool("simple_dungeon", 1, 0), LootTables.SIMPLE_DUNGEON);
-
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MomentumConfig.COMMON_SPEC);
+        modEventBus.addListener(this::gatherData);
+    }
+
+    @SubscribeEvent
+    public void gatherData(GatherDataEvent event) {
+        DataGenerator generator =  event.getGenerator();
+        PackOutput packOutput = generator.getPackOutput();
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+        generator.addProvider(event.includeServer(), new MomentumLootModifierProvider(packOutput, lookupProvider));
     }
 }

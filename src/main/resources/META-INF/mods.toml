@@ -1,13 +1,13 @@
 modLoader="javafml"
-loaderVersion="[32,)"
+loaderVersion="[47,)"
 issueTrackerURL="https://github.com/camcamcamcamcam/momentum/issues"
 license="https://github.com/camcamcamcamcam/momentum/blob/master/LICENSE.txt"
 
 [[mods]]
     modId="momentum"
-    version="1.0.0"
+    version="${file.jarVersion}"
     logoFile="logo.png"
-    authors="Cameron, Jackson, Smelly"
+    authors="Cameron, Jackson, Smelly, Uraneptus"
     displayName="Momentum"
     description='''
     An enchantment that speeds up with consecutive mining of the same block.'''
@@ -15,20 +15,20 @@ license="https://github.com/camcamcamcamcam/momentum/blob/master/LICENSE.txt"
 [[dependencies.momentum]]
     modId="forge"
     mandatory=true
-    versionRange="[35.1.37,)"
+    versionRange="[47.1,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.momentum]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.3,1.17)"
+    versionRange="[1.20,1.21)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.momentum]]
-    modId="abnormals_core"
+    modId="blueprint"
     mandatory=true
-    versionRange="[3.0.6,)"
+    versionRange="[7.0.0,)"
     ordering="AFTER"
     side="BOTH"
