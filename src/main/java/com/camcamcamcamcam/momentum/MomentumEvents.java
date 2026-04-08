@@ -3,12 +3,16 @@ package com.camcamcamcamcam.momentum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 public class MomentumEvents {
@@ -16,6 +20,8 @@ public class MomentumEvents {
     public static final int BASE = 2;
     public static final double COEFFICIENT = -1.0 / 16;
     public static final double OFFSET = -3.0 / 16;
+
+    public static final float MOVEMENT_AT_REST = 0.08f;
 
     @SubscribeEvent
     public static void onBlockDestroy(BlockEvent.BreakEvent event) {
@@ -42,6 +48,33 @@ public class MomentumEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onPlayerMove(EntityTickEvent.Post event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+
+        MobEffectInstance playerHaste = player.getEffect(MobEffects.DIG_SPEED);
+        int levelOfHaste = playerHaste == null ? -1 : playerHaste.getAmplifier();
+
+        if (player.isSteppingCarefully()) {
+            return;
+        }
+        if (player.isSprinting() && levelOfHaste > 0) {
+            return;
+        }
+        if (player.getDeltaMovement().length() < MOVEMENT_AT_REST) {
+            return;
+        }
+        if (!player.isSprinting() && levelOfHaste != -1) {
+            return;
+        }
+
+        resetBlocksMinedToZero(player);
+        PacketDistributor.sendToServer(new MomentumPayload("", 0));
+
+    }
+
     public static void addOneToBlocksMined(Player player) {
         player.setData(Momentum.BLOCKS_MINED, player.getData(Momentum.BLOCKS_MINED) + 1);
     }
@@ -51,7 +84,7 @@ public class MomentumEvents {
     }
 
     @SubscribeEvent
-    public static void getBreakSpeed(PlayerEvent.BreakSpeed event) {
+    public static void setBreakSpeed(PlayerEvent.BreakSpeed event) {
         Player player = event.getEntity();
 
         if (event.getPosition().isEmpty()) {
