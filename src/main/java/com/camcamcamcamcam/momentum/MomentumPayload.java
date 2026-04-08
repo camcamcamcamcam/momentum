@@ -6,7 +6,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
-public record MomentumPayload(String lastBlockMined, int blocksMined) implements CustomPacketPayload {
+public record MomentumPayload(String lastBlockMined, int blocksMined, String lastItemHeld) implements CustomPacketPayload {
 
 
     public static final CustomPacketPayload.Type<MomentumPayload> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(Momentum.MODID, "block_name"));
@@ -16,6 +16,8 @@ public record MomentumPayload(String lastBlockMined, int blocksMined) implements
             MomentumPayload::lastBlockMined,
             ByteBufCodecs.VAR_INT,
             MomentumPayload::blocksMined,
+            ByteBufCodecs.STRING_UTF8,
+            MomentumPayload::lastItemHeld,
             MomentumPayload::new
     );
 

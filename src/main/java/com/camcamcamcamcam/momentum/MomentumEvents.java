@@ -43,15 +43,26 @@ public class MomentumEvents {
         }
 
         if (!event.getLevel().isClientSide()) {
-            int blocksMined =  player.getData(Momentum.BLOCKS_MINED);
-            PacketDistributor.sendToPlayer((ServerPlayer) player, new MomentumPayload(lastBlockMined, blocksMined));
+            int blocksMined = player.getData(Momentum.BLOCKS_MINED);
+            String currentItemHeld = player.getItemInHand(InteractionHand.MAIN_HAND).toString();
+            PacketDistributor.sendToPlayer((ServerPlayer) player, new MomentumPayload(lastBlockMined, blocksMined, currentItemHeld));
         }
     }
 
     @SubscribeEvent
-    public static void onPlayerMove(EntityTickEvent.Post event) {
+    public static void onPlayerMoveOrItemSwitch(EntityTickEvent.Post event) {
         if (!(event.getEntity() instanceof Player player)) {
             return;
+        }
+
+        String lastItemHeld = player.getData(Momentum.LAST_ITEM_HELD);
+        String currentItemHeld = player.getItemInHand(InteractionHand.MAIN_HAND).getItem().toString();
+        // I do not for the life of me know why lastItemHeld is adding "1 " on the front in the client side.
+        if (!player.level().isClientSide() && !currentItemHeld.equals(lastItemHeld)
+        || player.level().isClientSide() && !currentItemHeld.equals(lastItemHeld.substring(2))) {
+            resetBlocksMinedToZero(player);
+            player.setData(Momentum.LAST_ITEM_HELD, currentItemHeld);
+            PacketDistributor.sendToServer(new MomentumPayload("", 0, currentItemHeld));
         }
 
         MobEffectInstance playerHaste = player.getEffect(MobEffects.DIG_SPEED);
@@ -71,7 +82,7 @@ public class MomentumEvents {
         }
 
         resetBlocksMinedToZero(player);
-        PacketDistributor.sendToServer(new MomentumPayload("", 0));
+        PacketDistributor.sendToServer(new MomentumPayload("", 0, currentItemHeld));
 
     }
 

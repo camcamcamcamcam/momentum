@@ -49,6 +49,10 @@ public class Momentum {
             "blocks_mined", () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
     );
 
+    public static final Supplier<AttachmentType<String>> LAST_ITEM_HELD = ATTACHMENT_TYPES.register(
+            "last_item_held", () -> AttachmentType.builder(() -> "").serialize(Codec.STRING).build()
+    );
+
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public Momentum(IEventBus modEventBus, ModContainer modContainer) {
