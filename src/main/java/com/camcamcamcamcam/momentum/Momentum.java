@@ -41,12 +41,20 @@ public class Momentum {
     // Create the DeferredRegister for attachment types
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, MODID);
 
-    public static final Supplier<AttachmentType<String>> LAST_BLOCK_MINED = ATTACHMENT_TYPES.register(
-            "last_block_mined", () -> AttachmentType.builder(() -> "minecraft:air").serialize(Codec.STRING).build()
+    public static final Supplier<AttachmentType<String>> LAST_BLOCK_MINED_1 = ATTACHMENT_TYPES.register(
+            "last_block_mined_1", () -> AttachmentType.builder(() -> MomentumEvents.AIR).serialize(Codec.STRING).build()
     );
 
-    public static final Supplier<AttachmentType<Integer>> BLOCKS_MINED = ATTACHMENT_TYPES.register(
-            "blocks_mined", () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
+    public static final Supplier<AttachmentType<Integer>> BLOCKS_MINED_1 = ATTACHMENT_TYPES.register(
+            "blocks_mined_1", () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
+    );
+
+    public static final Supplier<AttachmentType<String>> LAST_BLOCK_MINED_2 = ATTACHMENT_TYPES.register(
+            "last_block_mined_2", () -> AttachmentType.builder(() -> MomentumEvents.AIR).serialize(Codec.STRING).build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> BLOCKS_MINED_2 = ATTACHMENT_TYPES.register(
+            "blocks_mined_2", () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
     );
 
     public static final Supplier<AttachmentType<String>> LAST_ITEM_HELD = ATTACHMENT_TYPES.register(

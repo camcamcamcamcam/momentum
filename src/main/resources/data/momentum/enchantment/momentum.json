@@ -5,7 +5,7 @@
   "supported_items": "#minecraft:enchantable/mining",
   "exclusive_set": "minecraft:efficiency",
   "weight": 6,
-  "max_level": 3,
+  "max_level": 2,
   "max_cost": {
     "base": 45,
     "per_level_above_first": 9
