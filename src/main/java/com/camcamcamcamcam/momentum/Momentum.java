@@ -1,23 +1,18 @@
 package com.camcamcamcamcam.momentum;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.sounds.SoundEvent;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.*;
-import org.slf4j.Logger;
-
-import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 import java.util.function.Supplier;
 
@@ -26,8 +21,6 @@ import java.util.function.Supplier;
 public class Momentum {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "momentum";
-    // Directly reference a slf4j logger
-    public static final Logger LOGGER = LogUtils.getLogger();
 
     // In some registration class
     public static final DeferredRegister<DataComponentType<?>> ENCHANTMENT_COMPONENT_TYPES =
@@ -37,6 +30,10 @@ public class Momentum {
             ENCHANTMENT_COMPONENT_TYPES.register("gain_momentum", () -> DataComponentType.<GainMomentum>builder()
                     .persistent(GainMomentum.CODEC)
                     .build());
+
+    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, MODID);
+
+    public static final Holder<SoundEvent> MOMENTUM_HALT = SOUND_EVENTS.register("momentum_halt", SoundEvent::createVariableRangeEvent);
 
     // Create the DeferredRegister for attachment types
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, MODID);
@@ -67,11 +64,8 @@ public class Momentum {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
-        NeoForge.EVENT_BUS.register(this);
         ENCHANTMENT_COMPONENT_TYPES.register(modEventBus);
+        SOUND_EVENTS.register(modEventBus);
         ATTACHMENT_TYPES.register(modEventBus);
         NeoForge.EVENT_BUS.register(MomentumEvents.class);
 
@@ -82,10 +76,4 @@ public class Momentum {
 
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
-    }
 }

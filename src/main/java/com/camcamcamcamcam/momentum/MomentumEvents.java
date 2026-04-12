@@ -2,6 +2,7 @@ package com.camcamcamcamcam.momentum;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -16,6 +17,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 public class MomentumEvents {
@@ -146,8 +148,14 @@ public class MomentumEvents {
     }
 
     public static void resetBlocksMinedToZero(Player player) {
+        System.out.println(getNumbersOfBlocksMined(player)[0] + " " + getNumbersOfBlocksMined(player)[1]);
+        if (!Arrays.equals(getNumbersOfBlocksMined(player), new int[]{0, 0})) {
+            player.level().playSound(player, player.blockPosition(),
+                    Momentum.MOMENTUM_HALT.value(), SoundSource.PLAYERS, 0.2f, 1.0f);
+        }
         player.setData(Momentum.BLOCKS_MINED_1, 0);
         player.setData(Momentum.BLOCKS_MINED_2, 0);
+
     }
 
     public static void resetBlocksMinedToZero(Player player, String block) {
